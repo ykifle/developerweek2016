@@ -94,13 +94,13 @@ def runcheck():
         "name": "US-West",
         "longitude": -122.431297,
         "latitude": 37.7833,
-        "master": east_is_master,
-        "size": east_size,
-        "size_str": east_data[5],
-        "available": east_available,
-        "available_str": east_data[6],
-        "used": east_used,
-        "used_str": east_data[7]
+        "master": west_is_master,
+        "size": west_size,
+        "size_str": west_data[5],
+        "available": west_available,
+        "available_str": west_data[6],
+        "used": west_used,
+        "used_str": west_data[7]
       }
     ]
   }
