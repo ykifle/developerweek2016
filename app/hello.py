@@ -34,7 +34,8 @@ def mapdata():
 
 @app.route("/cmd")
 def runcommand():
-  proc = subprocess.Popen('ls', stdout=subprocess.PIPE)
+  com = "ssh -i devweek2016.pem ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'ls'"
+  proc = subprocess.Popen(com, stdout=subprocess.PIPE)
   return proc.stdout.read()
 
 if __name__ == "__main__":
