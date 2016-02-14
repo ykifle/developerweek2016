@@ -2,6 +2,7 @@ import os
 import flask
 from flask import Flask
 from flask.ext.cors import CORS
+import subprocess
 
 app = Flask(__name__)
 CORS(app)
@@ -30,6 +31,11 @@ def mapdata():
       }
   ]};
   return flask.jsonify(**data)
+
+@app.route("/cmd")
+def runcommand():
+  proc = subprocess.Popen('ls', stdout=subprocess.PIPE)
+  return proc.stdout.read()
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
