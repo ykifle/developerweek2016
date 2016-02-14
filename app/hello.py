@@ -34,7 +34,7 @@ def mapdata():
 
 @app.route("/cmd")
 def runcommand():
-  com = "ssh -i devweek2016.pem -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'ls'"
+  com = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'ls'"
   proc = subprocess.Popen(com, stdout=subprocess.PIPE)
   return proc.stdout.read()
 
