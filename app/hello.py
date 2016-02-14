@@ -49,7 +49,7 @@ def runcheck():
   east_result = sshcmd(EAST_HOST, 'sh check.sh')
   west_result = sshcmd(WEST_HOST, 'sh check.sh')
   east_is_master = 'This table is currently empty' in east_result
-  west_is_master = !east_is_master
+  west_is_master = not east_is_master
   east_param = 'dest' if east_is_master else 'src'
   west_param = 'dest' if west_is_master else 'src'
   east_data = re.sub(r"\s+", ' ', [l for l in east_result.split("\n") if re.search('{}\s'.format(east_param), l)][0]).strip().split(' ')
