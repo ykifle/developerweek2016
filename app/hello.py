@@ -5,6 +5,7 @@ from flask.ext.cors import CORS
 import subprocess
 import time
 import re
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -19,7 +20,7 @@ def hello():
 @app.route("/graphdata")
 def graphdata():
   data = {
-    'data': [13, 5, 2, 19]
+    'data': [int(20*random.random()) for i in xrange(10)]
   }
   return flask.jsonify(**data)
 
