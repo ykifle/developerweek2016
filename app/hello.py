@@ -18,13 +18,15 @@ def mapdata():
         "name": "US-West",
         "longitude": -122.431297,
         "latitude": 37.7833,
-        "id": 1
+        "id": 1,
+        "master": True
       },
       {
         "name": "US-East",
         "longitude": -73.138260,
         "latitude": 40.792240,
-        "id": 2
+        "id": 2,
+        "master": False
       }
   ]};
   return flask.jsonify(**data)
