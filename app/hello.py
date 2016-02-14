@@ -39,7 +39,7 @@ def runcommand():
   return proc.stdout.read()
 
 @app.route("/check")
-def runcommand():
+def runcheck():
   com1 = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'sh check.sh'"
   com2 = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-25-12-43.us-west-2.compute.amazonaws.com 'sh check.sh'"
   proc1 = subprocess.Popen(com1, shell=True, stdout=subprocess.PIPE)
