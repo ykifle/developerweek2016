@@ -9,7 +9,7 @@ def hello():
 
 @app.route("/mapdata")
 def mapdata():
-  data = {}
+  data = { "count": 10785236 }
   return flask.jsonify(**data)
 
 if __name__ == "__main__":
