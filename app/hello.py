@@ -36,16 +36,16 @@ def mapdata():
 def runcommand():
   com = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'ls'"
   proc = subprocess.Popen(com, shell=True, stdout=subprocess.PIPE)
-  return proc.stdout.read()
+  return proc.stdout.read().decode("utf-8")
 
 @app.route("/check")
 def runcheck():
   com1 = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'sh check.sh'"
   com2 = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-25-12-43.us-west-2.compute.amazonaws.com 'sh check.sh'"
   proc1 = subprocess.Popen(com1, shell=True, stdout=subprocess.PIPE)
-  result1 = proc1.stdout.read()
+  result1 = proc1.stdout.read().decode("utf-8")
   proc2 = subprocess.Popen(com2, shell=True, stdout=subprocess.PIPE)
-  result2 = proc2.stdout.read()
+  result2 = proc2.stdout.read().decode("utf-8")
   return "{}\n{}".format(result1, result2)
 
 if __name__ == "__main__":
