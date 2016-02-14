@@ -12,32 +12,20 @@ def hello():
 
 @app.route("/mapdata")
 def mapdata():
-  data = { "count": 10785236,
-   "photos": [
-      {"photo_id": 27932,
-      "photo_title": "Atardecer en Embalse",
-      "photo_url": "http://www.panoramio.com/photo/27932",
-      "photo_file_url": "http://mw2.google.com/mw-panoramio/photos/medium/27932.jpg",
-      "longitude": -122.431297,
-      "latitude": 37.7833,
-      "width": 500,
-      "height": 375,
-      "upload_date": "25 June 2006",
-      "owner_id": 4483,
-      "owner_name": "Miguel Coranti",
-      "owner_url": "http://www.panoramio.com/user/4483"},
-      {"photo_id": 27933,
-      "photo_title": "Atardecer en Embalse",
-      "photo_url": "http://www.panoramio.com/photo/27932",
-      "photo_file_url": "http://mw2.google.com/mw-panoramio/photos/medium/27932.jpg",
-      "longitude": -73.138260,
-      "latitude": 40.792240,
-      "width": 500,
-      "height": 375,
-      "upload_date": "25 June 2006",
-      "owner_id": 4483,
-      "owner_name": "Miguel Coranti",
-      "owner_url": "http://www.panoramio.com/user/4483"}
+  data = { "count": 2,
+   "nodes": [
+      {
+        "name": "US-West",
+        "longitude": -122.431297,
+        "latitude": 37.7833,
+        "id": 1
+      },
+      {
+        "name": "US-East",
+        "longitude": -73.138260,
+        "latitude": 40.792240,
+        "id": 2
+      }
   ]};
   return flask.jsonify(**data)
 
