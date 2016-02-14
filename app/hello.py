@@ -16,6 +16,13 @@ WEST_HOST = 'ec2-user@ec2-52-25-12-43.us-west-2.compute.amazonaws.com'
 def hello():
   return "Hello world!"
 
+@app.route("/graphdata")
+def graphdata():
+  data = {
+    'data': [13, 5, 2, 19]
+  }
+  return flask.jsonify(**data)
+
 @app.route("/mapdata")
 def mapdata():
   data = { "count": 2,
