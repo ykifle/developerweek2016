@@ -54,13 +54,15 @@ def runcheck():
 def oregonmaster():
   result1 = sshcmd(EAST_HOST, 'sh switch1.sh')
   time.sleep(2)
-  result1 = sshcmd(WEST_HOST, 'sh switch1.sh')
+  result2 = sshcmd(WEST_HOST, 'sh switch1.sh')
+  return "{}\n{}".format(result1, result2)
 
 @app.route("/eastmaster")
 def eastmaster():
   result1 = sshcmd(WEST_HOST, 'sh switch2.sh')
   time.sleep(2)
-  result1 = sshcmd(EAST_HOST, 'sh switch2.sh')
+  result2 = sshcmd(EAST_HOST, 'sh switch2.sh')
+  return "{}\n{}".format(result1, result2)
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
