@@ -3,9 +3,13 @@ import flask
 from flask import Flask
 from flask.ext.cors import CORS
 import subprocess
+import time
 
 app = Flask(__name__)
 CORS(app)
+
+EAST_HOST = 'ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com'
+WEST_HOST = 'ec2-user@ec2-52-25-12-43.us-west-2.compute.amazonaws.com'
 
 @app.route("/")
 def hello():
@@ -32,21 +36,31 @@ def mapdata():
   ]};
   return flask.jsonify(**data)
 
+def sshcmd(host, cmd):
+  com = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {} '{}'".format(host, cmd)
+  return subprocess.Popen(com1, shell=True, stdout=subprocess.PIPE).stdout.read().decode("utf-8")
+
 @app.route("/cmd")
 def runcommand():
-  com = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'ls'"
-  proc = subprocess.Popen(com, shell=True, stdout=subprocess.PIPE)
-  return proc.stdout.read().decode("utf-8")
+  return sshcmd(EAST_HOST, 'ls')
 
 @app.route("/check")
 def runcheck():
-  com1 = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-72-154-92.compute-1.amazonaws.com 'sh check.sh'"
-  com2 = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ec2-52-25-12-43.us-west-2.compute.amazonaws.com 'sh check.sh'"
-  proc1 = subprocess.Popen(com1, shell=True, stdout=subprocess.PIPE)
-  result1 = proc1.stdout.read().decode("utf-8")
-  proc2 = subprocess.Popen(com2, shell=True, stdout=subprocess.PIPE)
-  result2 = proc2.stdout.read().decode("utf-8")
+  result1 = sshcmd(EAST_HOST, 'sh check.sh')
+  result2 = sshcmd(WEST_HOST, 'sh check.sh')
   return "{}\n{}".format(result1, result2)
+
+@app.route("/westmaster")
+def oregonmaster():
+  result1 = sshcmd(EAST_HOST, 'sh switch1.sh')
+  time.sleep(2)
+  result1 = sshcmd(WEST_HOST, 'sh switch1.sh')
+
+@app.route("/eastmaster")
+def eastmaster():
+  result1 = sshcmd(WEST_HOST, 'sh switch2.sh')
+  time.sleep(2)
+  result1 = sshcmd(EAST_HOST, 'sh switch2.sh')
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
