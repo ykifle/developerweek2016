@@ -4,6 +4,7 @@ from flask import Flask
 from flask.ext.cors import CORS
 import subprocess
 import time
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -64,6 +65,7 @@ def runcheck():
     snap_data = re.sub(r"\s+", ' ', west_result.split("\n")[-3]).strip().split(' ')
   else:
     snap_data = re.sub(r"\s+", ' ', east_result.split("\n")[-3]).strip().split(' ')
+
   source_path = snap_data[0]
   destination_path = snap_data[2]
   mirror_state = snap_data[3]
