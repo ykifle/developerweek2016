@@ -13,7 +13,7 @@ def hello():
 @app.route("/mapdata")
 def mapdata():
   data = { "count": 2,
-   "photos": [
+   "nodes": [
       {
         "name": "US-West",
         "longitude": -122.431297,
