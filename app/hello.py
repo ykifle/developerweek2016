@@ -107,8 +107,8 @@ def runcheck():
 
   return flask.jsonify(**data)
 
-@app.route("/westmaster")
-def oregonmaster():
+@app.route("/eastmaster")
+def eastmaster():
   result1 = sshcmd(EAST_HOST, 'sh switch1.sh')
   time.sleep(2)
   result2 = sshcmd(WEST_HOST, 'sh switch1.sh')
@@ -117,8 +117,8 @@ def oregonmaster():
   }
   return flask.jsonify(**data)
 
-@app.route("/eastmaster")
-def eastmaster():
+@app.route("/westmaster")
+def westmaster():
   result1 = sshcmd(WEST_HOST, 'sh switch2.sh')
   time.sleep(2)
   result2 = sshcmd(EAST_HOST, 'sh switch2.sh')
