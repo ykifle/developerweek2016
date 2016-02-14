@@ -7,6 +7,8 @@ echo $0: creating private key files
 mkdir -p ${HOME}/.ssh
 chmod 700 ${HOME}/.ssh
 
+eval `ssh-agent -s`
+
 # Create the public and private key files from the environment variables.
 echo "${OREGON_PRIVATE_KEY}" > ${HOME}/.ssh/oregon.pem
 chmod 644 ${HOME}/.ssh/oregon.pem
