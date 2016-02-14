@@ -38,7 +38,7 @@ def mapdata():
 
 def sshcmd(host, cmd):
   com = "/usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {} '{}'".format(host, cmd)
-  return subprocess.Popen(com1, shell=True, stdout=subprocess.PIPE).stdout.read().decode("utf-8")
+  return subprocess.Popen(com, shell=True, stdout=subprocess.PIPE).stdout.read().decode("utf-8")
 
 @app.route("/cmd")
 def runcommand():
