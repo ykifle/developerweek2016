@@ -44,25 +44,88 @@ def sshcmd(host, cmd):
 def runcommand():
   return sshcmd(EAST_HOST, 'ls')
 
-@app.route("/check")
+@app.route("/status")
 def runcheck():
-  result1 = sshcmd(EAST_HOST, 'sh check.sh')
-  result2 = sshcmd(WEST_HOST, 'sh check.sh')
-  return "{}\n{}".format(result1, result2)
+  east_result = sshcmd(EAST_HOST, 'sh check.sh')
+  west_result = sshcmd(WEST_HOST, 'sh check.sh')
+  east_is_master = 'This table is currently empty' in east_result
+  west_is_master = !east_is_master
+  east_param = 'dest' if east_is_master else 'src'
+  west_param = 'dest' if west_is_master else 'src'
+  east_data = re.sub(r"\s+", ' ', [l for l in east_result.split("\n") if re.search('{}\s'.format(east_param), l)][0]).strip().split(' ')
+  west_data = re.sub(r"\s+", ' ', [l for l in west_result.split("\n") if re.search('{}\s'.format(west_param), l)][0]).strip().split(' ')
+  east_size = float(east_data[5].replace('GB', ''))
+  east_available = east_size = float(east_data[6].replace('GB', ''))
+  east_used = east_size = float(east_data[7].replace('%', ''))
+  west_size = float(west_data[5].replace('GB', ''))
+  west_available = west_size = float(west_data[6].replace('GB', ''))
+  west_used = west_size = float(west_data[7].replace('%', ''))
+  if east_is_master:
+    snap_data = re.sub(r"\s+", ' ', west_result.split("\n")[-3]).strip().split(' ')
+  else:
+    snap_data = re.sub(r"\s+", ' ', east_result.split("\n")[-3]).strip().split(' ')
+  source_path = snap_data[0]
+  destination_path = snap_data[2]
+  mirror_state = snap_data[3]
+  relationship_status = snap_data[4]
+  health_check = snap_data[6]
+
+  data = {
+    "output": "{}\n{}".format(east_result, west_result),
+    "source_path": source_path,
+    "destination_path": destination_path,
+    "mirror_state": mirror_state,
+    "relationship_status": relationship_status,
+    "health_check": health_check,
+    "nodes": [
+      {
+        "name": "US-East",
+        "longitude": -73.138260,
+        "latitude": 40.792240,
+        "master": east_is_master,
+        "size": east_size,
+        "size_str": east_data[5],
+        "available": east_available,
+        "available_str": east_data[6],
+        "used": east_used,
+        "used_str": east_data[7]
+      },
+      {
+        "name": "US-West",
+        "longitude": -122.431297,
+        "latitude": 37.7833,
+        "master": east_is_master,
+        "size": east_size,
+        "size_str": east_data[5],
+        "available": east_available,
+        "available_str": east_data[6],
+        "used": east_used,
+        "used_str": east_data[7]
+      }
+    ]
+  }
+
+  return flask.jsonify(**data)
 
 @app.route("/westmaster")
 def oregonmaster():
   result1 = sshcmd(EAST_HOST, 'sh switch1.sh')
   time.sleep(2)
   result2 = sshcmd(WEST_HOST, 'sh switch1.sh')
-  return "{}\n{}".format(result1, result2)
+  data = {
+    "output": "{}\n{}".format(result1, result2),
+  }
+  return flask.jsonify(**data)
 
 @app.route("/eastmaster")
 def eastmaster():
   result1 = sshcmd(WEST_HOST, 'sh switch2.sh')
   time.sleep(2)
   result2 = sshcmd(EAST_HOST, 'sh switch2.sh')
-  return "{}\n{}".format(result1, result2)
+  data = {
+    "output": "{}\n{}".format(result1, result2),
+  }
+  return flask.jsonify(**data)
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
